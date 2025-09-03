@@ -18,7 +18,7 @@
   </style>
 </head>
 <body>
-  <iframe id="formFrame" 
+  <iframe id="formFrame"
     src="https://forms.office.com/pages/responsepage.aspx?id=UjwYQCEZ1EOPLeW4Rkg7uNKEFmSammNKqj5VrCDxqX9UQVg5VFAyWFJSMFU1TDZTMFQzSkpYVVBHUy4u&origin=QRCode&qrcodeorigin=presentation&route=shorturl">
   </iframe>
 
@@ -26,19 +26,20 @@
     const formURL = "https://forms.office.com/pages/responsepage.aspx?id=UjwYQCEZ1EOPLeW4Rkg7uNKEFmSammNKqj5VrCDxqX9UQVg5VFAyWFJSMFU1TDZTMFQzSkpYVVBHUy4u&origin=QRCode&qrcodeorigin=presentation&route=shorturl";
     const iframe = document.getElementById("formFrame");
 
-    // Reload after submission
-    iframe.addEventListener("load", () => {
+    function checkThankYou() {
       try {
-        const currentURL = iframe.contentWindow.location.href;
-        if (!currentURL.includes("id=")) {
-          // Likely thank-you page → reload fresh form after 2s
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        if (doc && doc.body && doc.body.innerText.includes("Your Cougarcard request was submitted")) {
+          // Found thank-you text → reload fresh form after 2 seconds
           setTimeout(() => { iframe.src = formURL; }, 2000);
         }
       } catch (e) {
-        // Fallback: hard reload every 60 seconds
-        setTimeout(() => { iframe.src = formURL; }, 60000);
+        // Cross-origin restriction, fallback = do nothing
       }
-    });
+    }
+
+    // Check every 3 seconds for thank-you text
+    setInterval(checkThankYou, 3000);
   </script>
 </body>
 </html>
