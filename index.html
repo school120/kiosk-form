@@ -9,6 +9,7 @@
       padding: 0;
       height: 100%;
       overflow: hidden;
+      font-family: sans-serif;
       background: #f9f9f9;
     }
     iframe {
@@ -16,35 +17,53 @@
       height: 100%;
       border: none;
     }
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      z-index: 999;
+      display: none; /* Hidden initially */
+    }
   </style>
 </head>
 <body>
-  <iframe id="formFrame"
+  <!-- Microsoft Form iframe -->
+  <iframe id="formFrame" 
     src="https://forms.office.com/pages/responsepage.aspx?id=UjwYQCEZ1EOPLeW4Rkg7uNKEFmSammNKqj5VrCDxqX9UQVg5VFAyWFJSMFU1TDZTMFQzSkpYVVBHUy4u&origin=QRCode&qrcodeorigin=presentation&route=shorturl">
   </iframe>
 
+  <!-- Custom overlay -->
+  <div id="overlay">Thank you! Reloading…</div>
+
   <script>
     const iframe = document.getElementById("formFrame");
+    const overlay = document.getElementById("overlay");
     const formURL = iframe.src;
 
-    // Timed reload every 2 minutes (backup)
+    // Simulated “thank-you detection” using a timer (e.g., 15 seconds after page load)
+    function simulateThankYou() {
+      overlay.style.display = "flex"; // Show overlay
+      setTimeout(() => {
+        overlay.style.display = "none"; // Hide overlay
+        iframe.src = formURL; // Reload form
+      }, 3000); // Show overlay for 3 seconds
+    }
+
+    // Trigger simulated thank-you every 30 seconds (adjust as needed)
+    setInterval(simulateThankYou, 30000);
+
+    // Backup: reload iframe every 2 minutes to reset idle form
     setInterval(() => {
       iframe.src = formURL;
     }, 120000);
-
-    // Quick reload every 30 seconds (fallback)
-    setInterval(() => {
-      iframe.src = formURL;
-    }, 30000);
-
-    // Reload after iframe loads (assumes thank-you page may be displayed)
-    iframe.addEventListener('load', () => {
-      // Short delay to allow thank-you page to display before reload
-      setTimeout(() => {
-        // Force reload to form URL
-        iframe.src = formURL;
-      }, 5000); // 5 seconds after load
-    });
   </script>
 </body>
 </html>
