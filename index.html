@@ -30,13 +30,12 @@
     iframe.addEventListener("load", () => {
       try {
         const currentURL = iframe.contentWindow.location.href;
-        if (currentURL.includes("responsepage.aspx") && !currentURL.includes("id=")) {
-          // On thank-you page → reload fresh form after 2 seconds
+        if (!currentURL.includes("id=")) {
+          // Likely thank-you page → reload fresh form after 2s
           setTimeout(() => { iframe.src = formURL; }, 2000);
         }
       } catch (e) {
-        // Cross-origin restrictions might block URL detection
-        // Workaround: reload every 60 seconds to guarantee fresh form
+        // Fallback: hard reload every 60 seconds
         setTimeout(() => { iframe.src = formURL; }, 60000);
       }
     });
