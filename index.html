@@ -2,13 +2,14 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Kiosk Form</title>
+  <title>Cougarcard Request Kiosk</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       overflow: hidden;
+      background: #f9f9f9;
     }
     iframe {
       width: 100%;
@@ -23,18 +24,27 @@
   </iframe>
 
   <script>
-    const formURL = "https://forms.office.com/pages/responsepage.aspx?id=UjwYQCEZ1EOPLeW4Rkg7uNKEFmSammNKqj5VrCDxqX9UQVg5VFAyWFJSMFU1TDZTMFQzSkpYVVBHUy4u&origin=QRCode&qrcodeorigin=presentation&route=shorturl";
     const iframe = document.getElementById("formFrame");
+    const formURL = iframe.src;
 
-    // Auto-refresh the form every 2 minutes
+    // Timed reload every 2 minutes (backup)
     setInterval(() => {
       iframe.src = formURL;
-    }, 120000); // 120000ms = 2 minutes
+    }, 120000);
 
-    // Optional: quick reload fallback every 30 seconds in case iframe fails to load
+    // Quick reload every 30 seconds (fallback)
     setInterval(() => {
       iframe.src = formURL;
     }, 30000);
+
+    // Reload after iframe loads (assumes thank-you page may be displayed)
+    iframe.addEventListener('load', () => {
+      // Short delay to allow thank-you page to display before reload
+      setTimeout(() => {
+        // Force reload to form URL
+        iframe.src = formURL;
+      }, 5000); // 5 seconds after load
+    });
   </script>
 </body>
 </html>
