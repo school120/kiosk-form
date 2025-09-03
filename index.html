@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Kiosk Form</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <iframe id="formFrame" 
+    src="https://forms.office.com/pages/responsepage.aspx?id=UjwYQCEZ1EOPLeW4Rkg7uNKEFmSammNKqj5VrCDxqX9UQVg5VFAyWFJSMFU1TDZTMFQzSkpYVVBHUy4u&origin=QRCode&qrcodeorigin=presentation&route=shorturl">
+  </iframe>
+
+  <script>
+    const formURL = "https://forms.office.com/pages/responsepage.aspx?id=UjwYQCEZ1EOPLeW4Rkg7uNKEFmSammNKqj5VrCDxqX9UQVg5VFAyWFJSMFU1TDZTMFQzSkpYVVBHUy4u&origin=QRCode&qrcodeorigin=presentation&route=shorturl";
+    const iframe = document.getElementById("formFrame");
+
+    // Reload after submission
+    iframe.addEventListener("load", () => {
+      try {
+        const currentURL = iframe.contentWindow.location.href;
+        if (currentURL.includes("responsepage.aspx") && !currentURL.includes("id=")) {
+          // On thank-you page → reload fresh form after 2 seconds
+          setTimeout(() => { iframe.src = formURL; }, 2000);
+        }
+      } catch (e) {
+        // Cross-origin restrictions might block URL detection
+        // Workaround: reload every 60 seconds to guarantee fresh form
+        setTimeout(() => { iframe.src = formURL; }, 60000);
+      }
+    });
+  </script>
+</body>
+</html>
